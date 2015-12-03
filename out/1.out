@@ -1,0 +1,46 @@
+#<------- Web_Portal + NSGA3 ------->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:   22.29962 seconds.
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:   19.86209 seconds.
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:   21.20084 seconds.
+#<------- cellphone + NSGA3 ------->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:   12.30969 seconds.
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    9.39531 seconds.
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    9.66719 seconds.
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@n3m1-10>
+Subject: Job 510989: <$PYTHON jmoo_hpc_load.py 1> Done
+
+Job <$PYTHON jmoo_hpc_load.py 1> was submitted from host <login02.hpc.ncsu.edu> by user <jchen37> in cluster <henry2>.
+Job was executed on host(s) <n3m1-10>, in queue <debug>, as user <jchen37> in cluster <henry2>.
+</home/jchen37> was used as the home directory.
+</share/jchen37/storm_hpc> was used as the working directory.
+Started at Wed Dec  2 23:16:20 2015
+Results reported at Wed Dec  2 23:18:13 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+$PYTHON jmoo_hpc_load.py 1
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     98.73 sec.
+    Max Memory :        70 MB
+    Max Swap   :       725 MB
+
+    Max Processes  :         3
+    Max Threads    :        11
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <./err/1.err> for stderr output of this job.
+

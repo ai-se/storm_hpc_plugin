@@ -10,5 +10,5 @@ if index > len(core.tests.algorithms):
     exit(0)
 
 core.tests.algorithms = core.tests.algorithms[index:index+1]
-core.doTests()
+core.doTests_hpc()
 core.doReports(tag)

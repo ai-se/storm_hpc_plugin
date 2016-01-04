@@ -7,3 +7,4 @@ e.g.
 
 
 Data recording bug found. to be fixed.  01/04/16
+BUG: Rawdata folder data should not be seperated.

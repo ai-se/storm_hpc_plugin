@@ -1,0 +1,46 @@
+#<-- DTLZ4_7_3 + GALE ---repeat: 2---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    3.77928 seconds.
+#<-- DTLZ4_7_3 + DE ---repeat: 2---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    1.07564 seconds.
+#<-- DTLZ4_7_5 + GALE ---repeat: 2---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    3.59894 seconds.
+#<-- DTLZ4_7_5 + DE ---repeat: 2---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    0.84185 seconds.
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@n2k2-1>
+Subject: Job 826036: <mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py 2> Done
+
+Job <mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py 2> was submitted from host <login02.hpc.ncsu.edu> by user <jchen37> in cluster <henry2>.
+Job was executed on host(s) <4*n2k2-1>, in queue <debug>, as user <jchen37> in cluster <henry2>.
+</home/jchen37> was used as the home directory.
+</share/jchen37/Rescue_gale> was used as the working directory.
+Started at Wed Jan  6 16:28:00 2016
+Results reported at Wed Jan  6 16:28:10 2016
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py 2
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      8.37 sec.
+    Max Memory :         3 MB
+    Max Swap   :        35 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <./err/2.err> for stderr output of this job.
+

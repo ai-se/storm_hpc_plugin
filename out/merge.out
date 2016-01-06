@@ -1,0 +1,38 @@
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@n2l3-2>
+Subject: Job 826037: </share/jchen37/miniconda/bin/python2.7 jmoo_hpc_post_load.py> Done
+
+Job </share/jchen37/miniconda/bin/python2.7 jmoo_hpc_post_load.py> was submitted from host <login02.hpc.ncsu.edu> by user <jchen37> in cluster <henry2>.
+Job was executed on host(s) <n2l3-2>, in queue <debug>, as user <jchen37> in cluster <henry2>.
+</home/jchen37> was used as the home directory.
+</share/jchen37/Rescue_gale> was used as the working directory.
+Started at Wed Jan  6 16:28:33 2016
+Results reported at Wed Jan  6 16:28:34 2016
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/share/jchen37/miniconda/bin/python2.7 jmoo_hpc_post_load.py
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      0.96 sec.
+    Max Memory :         3 MB
+    Max Swap   :        35 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <./err/merge.err> for stderr output of this job.
+

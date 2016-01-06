@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with JMOO.  If not, see <http://www.gnu.org/licenses/>.
-    
+
 ###                        ###############################
 ##########################################################
 """
@@ -120,23 +120,26 @@ class jmoo_chart_report:
 
     def doit(self, tagnote=""):
         generate_final_frontier_for_gale4(self.tests.problems, self.tests.algorithms, self.Configurations, tag=tagnote)
-        hv_spread =[]
+        hv_spread = []
         for problem in self.tests.problems:
             hv_spread.append(charter_reporter([problem], self.tests.algorithms, self.Configurations, tag=tagnote))
         statistic_reporter(self.tests.problems, self.tests.algorithms, self.Configurations, tag=tagnote)
-        comparision_reporter(self.tests.problems, self.tests.algorithms, [hvp[0] for hvp in hv_spread], [hvp[1] for hvp in hv_spread], "GALE")
+        comparision_reporter(self.tests.problems, self.tests.algorithms, [hvp[0] for hvp in hv_spread],
+                             [hvp[1] for hvp in hv_spread], "GALE")
         generate_summary(self.tests.problems, self.tests.algorithms, "GALE", self.Configurations)
 
 
 def generate_final_frontier_for_gale4(problems, algorithms, Configurations, tag=""):
-    if "GALE4" not in [algorithm.name for algorithm in algorithms]: return
+    if "GALE4" not in [algorithm.name for algorithm in algorithms]:
+        return
     else:
         for problem in problems:
             from Graphics.PerformanceMeasures.DataFrame import ProblemFrame
             data = ProblemFrame(problem, [a for a in algorithms if a.name == "GALE4"])
 
             # data for all repeats
-            total_data = [data.get_frontier_values(gen_no) for gen_no in xrange(Configurations["Universal"]["No_of_Generations"])]
+            total_data = [data.get_frontier_values(gen_no) for gen_no in
+                          xrange(Configurations["Universal"]["No_of_Generations"])]
 
             data_for_all_generations = []
             for repeat in xrange(Configurations["Universal"]["Repeats"]):
@@ -152,14 +155,14 @@ def generate_final_frontier_for_gale4(problems, algorithms, Configurations, tag=
                 final_solutions, _ = selNSGA2(problem, [], solutions, Configurations)
 
                 for i in xrange(Configurations["Universal"]["No_of_Generations"]):
-                    filename = "./RawData/PopulationArchives/" + "GALE4" + "_" + problem.name + "/" + str(repeat) + "/" + \
-                               str(i+1) + ".txt"
+                    filename = "./RawData/PopulationArchives/" + "GALE4" + "_" + problem.name + "/" + str(
+                            repeat) + "/" + \
+                               str(i + 1) + ".txt"
                     f = open(filename, "w")
                     for fs in final_solutions:
-                        f.write(','.join([str(fss) for fss in fs.decisionValues]) + "," + ",".join([str(fss) for fss in fs.fitness.fitness]) + "\n")
+                        f.write(','.join([str(fss) for fss in fs.decisionValues]) + "," + ",".join(
+                                [str(fss) for fss in fs.fitness.fitness]) + "\n")
                     f.close()
-
-
 
 
 class jmoo_df_report:
@@ -207,162 +210,8 @@ class JMOO:
         sc2 = open(DATA_PREFIX + SUMMARY_RESULTS + DATA_SUFFIX, 'w')
 
         # Main control loop
-        representatives = []                        # List of resulting final generations (stat boxe datatype)
+        representatives = []  # List of resulting final generations (stat box datatype)
         record_string = "<Experiment>\n"
-        for problem in self.tests.problems:
-              
-            record_string += "<Problem name = '" + problem.name + "'>\n"
-            
-            for algorithm in self.tests.algorithms:
-                
-                record_string += "<Algorithm name = '" + algorithm.name + "'>\n"
-                
-                print "#<------- " + problem.name + " + " + algorithm.name + " ------->#"
-
-                # Initialize Data file for recording summary information [for just this problem + algorithm]
-                backend = problem.name + "_" + algorithm.name + ".txt"
-
-                # Decision Data
-                filename = problem.name + "-p" + str(self.configurations["Universal"]["Population_Size"]) + "-d" + str(
-                    len(problem.decisions)) + "-o" + str(len(problem.objectives)) + "_" + algorithm.name + DATA_SUFFIX
-                dbt = open(DATA_PREFIX + DECISION_BIN_TABLE + "_" + filename, 'w')
-                sr = open(DATA_PREFIX + SUMMARY_RESULTS + filename, 'w')
-                rrs = open(DATA_PREFIX + RRS_TABLE + "_" + filename, 'w')
-
-                # Results Record:
-                # # # Every generation
-                # # # Decisions + Objectives
-
-                # Summary Record
-                # - Best Generation Only
-                # - Number of Evaluations + Aggregated Objective Score
-                # - 
-
-
-                fa = open("Data/results_" + filename, 'w')
-                strings = ["NumEval"] \
-                          + [obj.name + "_median,(%chg),"
-                             + obj.name + "_spread" for obj in problem.objectives] \
-                          + ["IBD,(%chg), IBS"] + ["IGD,(%chg)"]
-                for s in strings: fa.write(s + ",")
-                fa.write("\n")
-                fa.close()
-
-                IGD_Values = []
-                # Repeat Core
-                for repeat in range(self.configurations["Universal"]["Repeats"]):
-
-                    foldername = "./RawData/PopulationArchives/" + algorithm.name + "_" + problem.name + "/" + str(repeat)
-                    import os
-                    if not os.path.exists(foldername):
-                        os.makedirs(foldername)
-                    # Run
-                    record_string += "<Run id = '" + str(repeat+1) + "'>\n"
-
-                    start = time.time()
-                    statBox = jmoo_evo(problem, algorithm, self.configurations)
-                    end = time.time()
-
-                    # Find best generation
-                    representative = statBox.box[0]
-                    for r, rep in enumerate(statBox.box):
-                        # for indi in rep.population:
-                        #     print indi
-                        if rep.IBD < representative.IBD:
-                            representative = statBox.box[r]
-                    representatives.append(representative)
-
-                    # Decision Bin Data
-                    s = ""
-                    for row in representative.population:
-                        for dec in row.decisionValues:
-                            s += str("%10.2f" % dec) + ","
-                        if row.valid:
-                            for obj in row.fitness.fitness:
-                                s += str("%10.2f" % obj) + ","
-                        else:
-                            for obj in problem.objectives:
-                                s += "?" + ","
-
-                        s += str(representative.numEval) + ","
-                        s += "\n"
-
-                    dbt.write(s)
-
-                    baseline = problem.referencePoint
-                    s = ""
-                    for row in representative.population:
-                        # if not row.valid:
-                        #    row.evaluate()
-                        if row.valid:
-                            for o, base, obj in zip(row.fitness.fitness, baseline, problem.objectives):
-                                c = percentChange(o, base, obj.lismore, obj.low, obj.up)
-                                s += c + ","
-                            s += str(representative.numEval) + ","
-                            for o, base, obj in zip(row.fitness.fitness, baseline, problem.objectives):
-                                c = str("%12.2f" % o)
-                                s += c + ","
-                            s += "\n"
-                    rrs.write(s)
-
-                    # output every generation
-                    for box in [representative]:
-                        s_out = ""
-                        s_out += str(self.configurations["Universal"]["Population_Size"]) + ","
-                        s_out += problem.name + "-p" + str(
-                            self.configurations["Universal"]["Population_Size"]) + "-d" + str(
-                            len(problem.decisions)) + "-o" + str(len(problem.objectives)) + ","
-                        s_out += algorithm.name + ","
-                        s_out += str(box.numEval) + ","
-                        for low in representative.fitnessMedians:
-                            s_out += str("%10.2f" % low) + ","
-                        s_out += str("%10.2f" % box.IBD) + "," + str("%10.2f" % box.IBS) + "," + str((end - start))
-                        sr.write(s_out + "\n")
-                        sc2.write(s_out + "\n")
-
-
-                    record_string += "<Summary>\n"
-                    record_string += "<NumEvals>" + str(representative.numEval) + "</NumEvals>\n"
-                    record_string += "<RunTime>" + str((end-start)) + "</RunTime>\n"
-                    record_string += "<IBD>" + str(box.IBD) + "</IBD>\n"
-                    record_string += "<IBS>" + str(box.IBS) + "</IBS>\n"
-                    for i in range(len(problem.objectives)):
-                        record_string += "<" + problem.objectives[i].name + ">" + str(representative.fitnessMedians[i]) + "</" + problem.objectives[i].name + ">\n"
-                    record_string += "</Summary>"
-                        
-                        
-                    
-                    
-                    # Finish
-                    record_string += "</Run>\n"
-                    print " # Finished: Celebrate! # " + " Time taken: " + str("%10.5f" % (end-start)) + " seconds."
-                    
-                record_string += "</Algorithm>\n"
-            record_string += "</Problem>\n"
-        record_string += "</Experiment>\n"
-
-        from time import strftime
-        date_folder_prefix = strftime("%m-%d-%Y")
-        if not os.path.isdir('./RawData/ExperimentalRecords/' + date_folder_prefix):
-            os.makedirs('./RawData/ExperimentalRecords/' + date_folder_prefix)
-        record_number = len([name for name in os.listdir('./RawData/ExperimentalRecords/' + date_folder_prefix)]) + 1
-        filename = './RawData/ExperimentalRecords/' + date_folder_prefix + '/Record' + "_" + str("%02d" % record_number) + "_" + 'ExperimentRecords.xml'
-        zOutFile = open(filename, 'w')
-        zOutFile.write(record_string)
-
-    def doTests_hpc(self):
-        from mpi4py import MPI
-
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
-        core = min(self.configurations["Universal"]["Repeats"], 4)
-
-        sc2 = open(DATA_PREFIX + SUMMARY_RESULTS + DATA_SUFFIX, 'w')
-
-        # Main control loop
-        representatives = []                        # List of resulting final generations (stat boxe datatype)
-        record_string = "<Experiment>\n"
-
         for problem in self.tests.problems:
 
             record_string += "<Problem name = '" + problem.name + "'>\n"
@@ -378,7 +227,8 @@ class JMOO:
 
                 # Decision Data
                 filename = problem.name + "-p" + str(self.configurations["Universal"]["Population_Size"]) + "-d" + str(
-                    len(problem.decisions)) + "-o" + str(len(problem.objectives)) + "_" + algorithm.name + DATA_SUFFIX
+                        len(problem.decisions)) + "-o" + str(
+                        len(problem.objectives)) + "_" + algorithm.name + DATA_SUFFIX
                 dbt = open(DATA_PREFIX + DECISION_BIN_TABLE + "_" + filename, 'w')
                 sr = open(DATA_PREFIX + SUMMARY_RESULTS + filename, 'w')
                 rrs = open(DATA_PREFIX + RRS_TABLE + "_" + filename, 'w')
@@ -392,6 +242,7 @@ class JMOO:
                 # - Number of Evaluations + Aggregated Objective Score
                 # -
 
+
                 fa = open("Data/results_" + filename, 'w')
                 strings = ["NumEval"] \
                           + [obj.name + "_median,(%chg),"
@@ -404,14 +255,14 @@ class JMOO:
                 IGD_Values = []
                 # Repeat Core
                 for repeat in range(self.configurations["Universal"]["Repeats"]):
-                    if repeat % core != rank: continue
 
-                    foldername = "./RawData/PopulationArchives/" + algorithm.name + "_" + problem.name + "/" + str(repeat)
+                    foldername = "./RawData/PopulationArchives/" + algorithm.name + "_" + problem.name + "/" + str(
+                            repeat)
                     import os
                     if not os.path.exists(foldername):
                         os.makedirs(foldername)
                     # Run
-                    record_string += "<Run id = '" + str(repeat+1) + "'>\n"
+                    record_string += "<Run id = '" + str(repeat + 1) + "'>\n"
 
                     start = time.time()
                     statBox = jmoo_evo(problem, algorithm, self.configurations)
@@ -464,8 +315,8 @@ class JMOO:
                         s_out = ""
                         s_out += str(self.configurations["Universal"]["Population_Size"]) + ","
                         s_out += problem.name + "-p" + str(
-                            self.configurations["Universal"]["Population_Size"]) + "-d" + str(
-                            len(problem.decisions)) + "-o" + str(len(problem.objectives)) + ","
+                                self.configurations["Universal"]["Population_Size"]) + "-d" + str(
+                                len(problem.decisions)) + "-o" + str(len(problem.objectives)) + ","
                         s_out += algorithm.name + ","
                         s_out += str(box.numEval) + ","
                         for low in representative.fitnessMedians:
@@ -474,43 +325,204 @@ class JMOO:
                         sr.write(s_out + "\n")
                         sc2.write(s_out + "\n")
 
-
                     record_string += "<Summary>\n"
                     record_string += "<NumEvals>" + str(representative.numEval) + "</NumEvals>\n"
-                    record_string += "<RunTime>" + str((end-start)) + "</RunTime>\n"
+                    record_string += "<RunTime>" + str((end - start)) + "</RunTime>\n"
                     record_string += "<IBD>" + str(box.IBD) + "</IBD>\n"
                     record_string += "<IBS>" + str(box.IBS) + "</IBS>\n"
                     for i in range(len(problem.objectives)):
-                        record_string += "<" + problem.objectives[i].name + ">" + str(representative.fitnessMedians[i]) + "</" + problem.objectives[i].name + ">\n"
+                        record_string += "<" + problem.objectives[i].name + ">" + str(
+                                representative.fitnessMedians[i]) + "</" + problem.objectives[i].name + ">\n"
                     record_string += "</Summary>"
-
-
-
 
                     # Finish
                     record_string += "</Run>\n"
-                    print " # Finished: Celebrate! # " + " Time taken: " + str("%10.5f" % (end-start)) + " seconds."
-
-                    if rank != 0 and self.configurations["Universal"]["Repeats"]-repeat < core:
-                        comm.send(True, dest=0)
+                    print " # Finished: Celebrate! # " + " Time taken: " + str("%10.5f" % (end - start)) + " seconds."
 
                 record_string += "</Algorithm>\n"
             record_string += "</Problem>\n"
         record_string += "</Experiment>\n"
 
-        if rank == 0:
-            for i in range(1, core):
-                comm.recv(source=i)
+        from time import strftime
+        date_folder_prefix = strftime("%m-%d-%Y")
+        if not os.path.isdir('./RawData/ExperimentalRecords/' + date_folder_prefix):
+            os.makedirs('./RawData/ExperimentalRecords/' + date_folder_prefix)
+        record_number = len([name for name in os.listdir('./RawData/ExperimentalRecords/' + date_folder_prefix)]) + 1
+        filename = './RawData/ExperimentalRecords/' + date_folder_prefix + '/Record' + "_" + str(
+                "%02d" % record_number) + "_" + 'ExperimentRecords.xml'
+        zOutFile = open(filename, 'w')
+        zOutFile.write(record_string)
 
-            from time import strftime
-            date_folder_prefix = strftime("%m-%d-%Y")
-            if not os.path.isdir('./RawData/ExperimentalRecords/' + date_folder_prefix):
-                os.makedirs('./RawData/ExperimentalRecords/' + date_folder_prefix)
-            record_number = len([name for name in os.listdir('./RawData/ExperimentalRecords/' + date_folder_prefix)]) + 1
-            filename = './RawData/ExperimentalRecords/' + date_folder_prefix + '/Record' + "_" + str("%02d" % record_number) + "_" + 'ExperimentRecords.xml'
-            zOutFile = open(filename, 'w')
-            zOutFile.write(record_string)
-                    
-    def doReports(self,thing=""):
+    def doSingleTest(self, problem, algorithm, repeat_index):
+        import os
+        filename = problem.name + "-p" + str(self.configurations["Universal"]["Population_Size"]) + "-d" + str(
+                len(problem.decisions)) + "-o" + str(
+                len(problem.objectives)) + "_" + algorithm.name + DATA_SUFFIX
+        results_file = "Data/results_" + filename
+
+        if not os.path.isfile(results_file):
+            fa = open("Data/results_" + filename, 'w')
+            strings = ["NumEval"] \
+                      + [obj.name + "_median,(%chg),"
+                         + obj.name + "_spread" for obj in problem.objectives] \
+                      + ["IBD,(%chg), IBS"] + ["IGD,(%chg)"]
+            for s in strings: fa.write(s + ",")
+            fa.write("\n")
+            fa.close()
+
+        print "#<-- " + problem.name + " + " + algorithm.name + " ---repeat: " + str(repeat_index) + "---->#"
+
+        foldername = "./RawData/PopulationArchives/" + algorithm.name + "_" + problem.name + "/" + str(repeat_index)
+        import os
+        if not os.path.exists(foldername):
+            os.makedirs(foldername)
+
+        representatives = []  # List of resulting final generations (stat box datatype)
+        record_string = "<Run id = '" + str(repeat_index + 1) + "'>\n"
+        start = time.time()
+        statBox = jmoo_evo(problem, algorithm, self.configurations, repeat=repeat_index)
+        end = time.time()
+
+        # Find best generation
+        representative = statBox.box[0]
+        for r, rep in enumerate(statBox.box):
+            # for indi in rep.population:
+            #     print indi
+            if rep.IBD < representative.IBD:
+                representative = statBox.box[r]
+        representatives.append(representative)
+
+        # Decision Bin Data
+        s = ""
+        sr = ""
+        sc2 = ""
+        for row in representative.population:
+            for dec in row.decisionValues:
+                s += str("%10.2f" % dec) + ","
+            if row.valid:
+                for obj in row.fitness.fitness:
+                    s += str("%10.2f" % obj) + ","
+            else:
+                for obj in problem.objectives:
+                    s += "?" + ","
+
+            s += str(representative.numEval) + ","
+            s += "\n"
+
+        DBT = s
+
+        baseline = problem.referencePoint
+        s = ""
+        for row in representative.population:
+            # if not row.valid:
+            #    row.evaluate()
+            if row.valid:
+                for o, base, obj in zip(row.fitness.fitness, baseline, problem.objectives):
+                    c = percentChange(o, base, obj.lismore, obj.low, obj.up)
+                    s += c + ","
+                s += str(representative.numEval) + ","
+                for o, base, obj in zip(row.fitness.fitness, baseline, problem.objectives):
+                    c = str("%12.2f" % o)
+                    s += c + ","
+                s += "\n"
+
+        RRS = s
+
+        # output every generation
+        for box in [representative]:
+            s_out = ""
+            s_out += str(self.configurations["Universal"]["Population_Size"]) + ","
+            s_out += problem.name + "-p" + str(
+                    self.configurations["Universal"]["Population_Size"]) + "-d" + str(
+                    len(problem.decisions)) + "-o" + str(len(problem.objectives)) + ","
+            s_out += algorithm.name + ","
+            s_out += str(box.numEval) + ","
+            for low in representative.fitnessMedians:
+                s_out += str("%10.2f" % low) + ","
+            s_out += str("%10.2f" % box.IBD) + "," + str("%10.2f" % box.IBS) + "," + str((end - start))
+            sr += (s_out + "\n")
+            sc2 += (s_out + "\n")
+
+        record_string += "<Summary>\n"
+        record_string += "<NumEvals>" + str(representative.numEval) + "</NumEvals>\n"
+        record_string += "<RunTime>" + str((end - start)) + "</RunTime>\n"
+        record_string += "<IBD>" + str(box.IBD) + "</IBD>\n"
+        record_string += "<IBS>" + str(box.IBS) + "</IBS>\n"
+        for i in range(len(problem.objectives)):
+            record_string += "<" + problem.objectives[i].name + ">" + str(
+                    representative.fitnessMedians[i]) + "</" + problem.objectives[i].name + ">\n"
+        record_string += "</Summary>"
+
+        # Finish
+        record_string += "</Run>\n"
+        print " # Finished: Celebrate! # " + " Time taken: " + str("%10.5f" % (end - start)) + " seconds."
+
+        runs = "./HpcData/" + algorithm.name + "_" + problem.name + "_" + str(repeat_index) + ".rundata"
+        import pickle
+        with open(runs, 'w+') as f:
+            pickle.dump([DBT, RRS, sr, sc2, record_string], f)
+
+    def merging_results_hpc(self):
+        import pickle
+
+        sc2 = open(DATA_PREFIX + SUMMARY_RESULTS + DATA_SUFFIX, 'w')
+        record_string = "<Experiment>\n"
+        for problem in self.tests.problems:
+            record_string += "<Problem name = '" + problem.name + "'>\n"
+
+            for algorithm in self.tests.algorithms:
+                record_string += "<Algorithm name = '" + algorithm.name + "'>\n"
+
+                # Initialize Data file for recording summary information [for just this problem + algorithm]
+                backend = problem.name + "_" + algorithm.name + ".txt"
+
+                # Decision Data
+                filename = problem.name + "-p" + str(self.configurations["Universal"]["Population_Size"]) + "-d" + str(
+                        len(problem.decisions)) + "-o" + str(
+                        len(problem.objectives)) + "_" + algorithm.name + DATA_SUFFIX
+                dbt = open(DATA_PREFIX + DECISION_BIN_TABLE + "_" + filename, 'w')
+                sr = open(DATA_PREFIX + SUMMARY_RESULTS + filename, 'w')
+                rrs = open(DATA_PREFIX + RRS_TABLE + "_" + filename, 'w')
+
+                # Results Record:
+                # # # Every generation
+                # # # Decisions + Objectives
+
+                # Summary Record
+                # - Best Generation Only
+                # - Number of Evaluations + Aggregated Objective Score
+                # -
+
+                IGD_Values = []
+
+                # Repeat Core
+                for repeat in range(self.configurations["Universal"]["Repeats"]):
+                    # load the finished running data
+                    runs = "./HpcData/" + algorithm.name + "_" + problem.name + "_" + str(repeat) + ".rundata"
+                    with open(runs, 'r') as f:
+                        [DBT, RRS, SR, SC2, Record_string] = pickle.load(f)
+
+                    dbt.write(DBT)
+                    rrs.write(RRS)
+                    sr.write(SR)
+                    sc2.write(SC2)
+                    record_string += Record_string
+
+                record_string += "</Algorithm>\n"
+            record_string += "</Problem>\n"
+        record_string += "</Experiment>\n"
+
+        from time import strftime
+        import os
+        date_folder_prefix = strftime("%m-%d-%Y")
+        if not os.path.isdir('./RawData/ExperimentalRecords/' + date_folder_prefix):
+            os.makedirs('./RawData/ExperimentalRecords/' + date_folder_prefix)
+        record_number = len([name for name in os.listdir('./RawData/ExperimentalRecords/' + date_folder_prefix)]) + 1
+        filename = './RawData/ExperimentalRecords/' + date_folder_prefix + '/Record' + "_" + str(
+                "%02d" % record_number) + "_" + 'ExperimentRecords.xml'
+        zOutFile = open(filename, 'w')
+        zOutFile.write(record_string)
+
+    def doReports(self, thing=""):
         for report in self.reports:
             report.doit(tagnote=thing)

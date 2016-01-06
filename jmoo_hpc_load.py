@@ -1,14 +1,14 @@
-import pickle
-import sys
+import pickle, pdb
+from jmoo_core import *
 
-with open('hpc_dumps/tmp_jmoo_core_obj','rb') as f:
-    [core,tag] = pickle.load(f)
+import os, sys, inspect
 
-index = int(sys.argv[1])
-if index > len(core.tests.algorithms):
-    print 'no!no!no! index error at hpc job submitting'
-    exit(0)
+with open('HpcData/whole.core', 'rb') as f:
+    [core, tag] = pickle.load(f)
 
-core.tests.algorithms = core.tests.algorithms[index:index+1]
-core.doTests_hpc()
-core.doReports(tag)
+repeat_id = int(sys.argv[1])
+
+
+for problem in core.tests.problems:
+    for algorithm in core.tests.algorithms:
+        core.doSingleTest(problem, algorithm, repeat_id)

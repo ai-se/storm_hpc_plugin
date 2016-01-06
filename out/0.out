@@ -1,35 +1,35 @@
-#<------- Web_Portal + DE ------->#
-1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    2.84253 seconds.
-1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    1.38750 seconds.
-1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    1.38740 seconds.
-#<------- cellphone + DE ------->#
-1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    1.04795 seconds.
-1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    0.50627 seconds.
-1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    0.50456 seconds.
+#<-- DTLZ4_7_3 + GALE ---repeat: 0---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    3.07880 seconds.
+#<-- DTLZ4_7_3 + DE ---repeat: 0---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    0.86262 seconds.
+#<-- DTLZ4_7_5 + GALE ---repeat: 0---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    3.16925 seconds.
+#<-- DTLZ4_7_5 + DE ---repeat: 0---->#
+1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |   # Finished: Celebrate! #  Time taken:    0.62719 seconds.
 
 ------------------------------------------------------------
-Sender: LSF System <lsfadmin@n3l3-4>
-Subject: Job 510988: <$PYTHON jmoo_hpc_load.py 0> Done
+Sender: LSF System <lsfadmin@n2l3-2>
+Subject: Job 826034: <mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py 0> Done
 
-Job <$PYTHON jmoo_hpc_load.py 0> was submitted from host <login02.hpc.ncsu.edu> by user <jchen37> in cluster <henry2>.
-Job was executed on host(s) <n3l3-4>, in queue <debug>, as user <jchen37> in cluster <henry2>.
+Job <mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py 0> was submitted from host <login02.hpc.ncsu.edu> by user <jchen37> in cluster <henry2>.
+Job was executed on host(s) <4*n2l3-2>, in queue <debug>, as user <jchen37> in cluster <henry2>.
 </home/jchen37> was used as the home directory.
-</share/jchen37/storm_hpc> was used as the working directory.
-Started at Wed Dec  2 23:16:20 2015
-Results reported at Wed Dec  2 23:16:29 2015
+</share/jchen37/Rescue_gale> was used as the working directory.
+Started at Wed Jan  6 16:28:00 2016
+Results reported at Wed Jan  6 16:28:20 2016
 
 Your job looked like:
 
 ------------------------------------------------------------
 # LSBATCH: User input
-$PYTHON jmoo_hpc_load.py 0
+mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py 0
 ------------------------------------------------------------
 
 Successfully completed.
 
 Resource usage summary:
 
-    CPU time   :      7.25 sec.
+    CPU time   :      7.59 sec.
     Max Memory :         3 MB
     Max Swap   :        35 MB
 

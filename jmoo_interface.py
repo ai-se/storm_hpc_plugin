@@ -126,17 +126,16 @@ else:  # the HPC process
     # distribute one repeat to a job/machine
     ids = []
     for repeat in range(core.configurations["Universal"]["Repeats"]):
-        """
+        #"""
         bashCommand = 'bsub -W 100 -n 4 -o ./out/' + str(repeat) + '.out -e ./err/' + str(
                 repeat) + '.err mpiexec -n 1 /share/jchen37/miniconda/bin/python2.7 jmoo_hpc_load.py ' + str(repeat)
-        """
-        bashCommand = 'python jmoo_hpc_load.py ' + str(repeat)
+        #"""
+        #bashCommand = 'python jmoo_hpc_load.py ' + str(repeat)
         process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
         tmp_s = process.communicate()[0]
         print tmp_s
-        #ids.append(int(tmp_s.split()[1][1:-1]))
+        ids.append(int(tmp_s.split()[1][1:-1]))
 
-    """
     bash = 'done(' + str(ids[0]) + ')'
     for i in ids[1:]:
         bash += ' && done(' + str(i) + ')'
@@ -146,5 +145,5 @@ else:  # the HPC process
     print 'PLEASE RUN THE FOLLOWING COMMAND NOW'
     print bsub
     print '!'*15
-    """
+
 

@@ -354,6 +354,7 @@ class JMOO:
         zOutFile.write(record_string)
 
     def doSingleTest(self, problem, algorithm, repeat_index):
+        """
         import os
         filename = problem.name + "-p" + str(self.configurations["Universal"]["Population_Size"]) + "-d" + str(
                 len(problem.decisions)) + "-o" + str(
@@ -369,7 +370,7 @@ class JMOO:
             for s in strings: fa.write(s + ",")
             fa.write("\n")
             fa.close()
-
+        """
         print "#<-- " + problem.name + " + " + algorithm.name + " ---repeat: " + str(repeat_index) + "---->#"
 
         foldername = "./RawData/PopulationArchives/" + algorithm.name + "_" + problem.name + "/" + str(repeat_index)
@@ -463,7 +464,7 @@ class JMOO:
             pickle.dump([DBT, RRS, sr, sc2, record_string], f)
 
     def merging_results_hpc(self):
-        import pickle
+        import pickle, os, pdb
 
         sc2 = open(DATA_PREFIX + SUMMARY_RESULTS + DATA_SUFFIX, 'w')
         record_string = "<Experiment>\n"
@@ -484,6 +485,17 @@ class JMOO:
                 sr = open(DATA_PREFIX + SUMMARY_RESULTS + filename, 'w')
                 rrs = open(DATA_PREFIX + RRS_TABLE + "_" + filename, 'w')
 
+                results_file = "Data/results_" + filename
+                if not os.path.isfile(results_file):
+                    fa = open("Data/results_" + filename, 'w')
+                    strings = ["NumEval"] \
+                              + [obj.name + "_median,(%chg),"
+                                 + obj.name + "_spread" for obj in problem.objectives] \
+                              + ["IBD,(%chg), IBS"] + ["IGD,(%chg)"]
+                    for s in strings: fa.write(s + ",")
+                    fa.write("\n")
+                    fa.close()
+
                 # Results Record:
                 # # # Every generation
                 # # # Decisions + Objectives
@@ -497,8 +509,15 @@ class JMOO:
 
                 # Repeat Core
                 for repeat in range(self.configurations["Universal"]["Repeats"]):
+                    # write the results
+                    results_dest = open(results_file, 'a')
+                    results_source = open("HpcData/results_" + str(repeat) + "_" + filename, 'r')
+                    results_dest.write(results_source.read())
+                    results_source.close()
+                    results_dest.close()
+
                     # load the finished running data
-                    runs = "./HpcData/" + algorithm.name + "_" + problem.name + "_" + str(repeat) + ".rundata"
+                    runs = "HpcData/" + algorithm.name + "_" + problem.name + "_" + str(repeat) + ".rundata"
                     with open(runs, 'r') as f:
                         [DBT, RRS, SR, SC2, Record_string] = pickle.load(f)
 

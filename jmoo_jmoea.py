@@ -104,7 +104,7 @@ def jmoo_evo(problem, algorithm, configurations, toStop = bstop, repeat = -1):
       - A record (statBox) of the best generation of evolution
     ----------------------------------------------------------------------------
     """
-    
+
     # # # # # # # # # # #
     # 1) Initialization #
     # # # # # # # # # # #
